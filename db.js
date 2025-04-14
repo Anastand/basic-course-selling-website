@@ -1,8 +1,6 @@
 const mongoose = require("mongoose");
 const schema = mongoose.Schema;
 const objectID = mongoose.Types.ObjectId;
-console.log("you im in")
-mongoose.connect("mongodb+srv://bhardwaj03aryan:9g7ncxqbbk@cluster0.le0ri9c.mongodb.net/basic-course-selling-website")
 
 const userschema = new schema({
   name: String,

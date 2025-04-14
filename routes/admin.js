@@ -1,6 +1,7 @@
 const express = require("express");
 const arouter = express.Router();
 const { adminModel } = require("../db");
+
 arouter.post('/signin', (req, res) => {
   res.json({ msg: 'hello from signin admin' }); // Fixed typo in message
 });
