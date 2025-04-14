@@ -1,9 +1,10 @@
 const mongoose = require("mongoose");
 const schema = mongoose.Schema;
 const objectID = mongoose.Types.ObjectId;
+console.log("you im in")
+mongoose.connect("mongodb+srv://bhardwaj03aryan:9g7ncxqbbk@cluster0.le0ri9c.mongodb.net/basic-course-selling-website")
 
-
-const userschema = schema({
+const userschema = new schema({
   name: String,
   userID: objectID,
   email: {type:String, unique:true},
@@ -12,7 +13,7 @@ const userschema = schema({
   lastName:String
 })
 
-const adminchema = schema({
+const adminchema = new schema({
   name: String,
   userID: objectID,
   email: {type:String, unique:true},
@@ -21,7 +22,7 @@ const adminchema = schema({
   lastName:String
 })
 
-const courseschema = schema({
+const courseschema = new schema({
   title: String,
   courseID: objectID,
   description: String,
@@ -29,7 +30,7 @@ const courseschema = schema({
   imgurl: String,
   
 })
-const purchsedschema = schema({
+const purchsedschema = new schema({
   userID: objectID,
   courseID: objectID
 })
