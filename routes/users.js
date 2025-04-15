@@ -8,6 +8,11 @@ const { userModel } = require("../db"); // Import user model from database
 const { z } = require("zod"); // Import Zod for validation
 // Import bcrypt for hashing passwords securely
 const bcr = require("bcrypt"); // Import bcrypt for password hashing
+const jwt  = require('jsonwebtoken');
+const JWT_USERS_PASSWORD = "user123";
+
+
+
 
 // Define signup route to handle new user registration
 urouter.post('/signup', async (req, res) => {
@@ -57,9 +62,26 @@ urouter.post('/signup', async (req, res) => {
 });
 
 // Define signin route as a placeholder for user login functionality
-urouter.post('/signin', (req, res) => {
-  // Return a simple response (to be expanded with authentication logic)
-  res.json({ msg: 'Hello from signin' });
+urouter.post('/signin', async (req, res) => {
+  const { email, password } = req.body;
+  const user = await userModel.findOne({ email })
+  if (!user) {
+    res.send({msg:"this email doesnt exist"})
+    return
+  };
+  try {
+    const ismatch = await bcr.compare(password, user.password)
+    if (!ismatch) {
+    res.send({msg:"this password is worng"})
+    return
+    };
+    const usertoken = jwt.sign({ id: user._id.toString() }, JWT_USERS_PASSWORD);
+    console.log(usertoken)
+    res.send({ msg: usertoken });
+  } catch (e) {
+    res.send({msg:"we had some problem in the backedn"})
+  }
+  
 });
 
 // Define purchases route as a placeholder for retrieving user purchase data
