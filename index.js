@@ -23,5 +23,4 @@ app.use('/user', urouter);
 app.use('/admin', arouter);
 app.use('/course', crouter);
 
-
 connection();

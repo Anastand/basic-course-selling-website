@@ -4,7 +4,9 @@ const { adminModel } = require("../db");
 const { z } = require("zod");
 const bcr = require("bcrypt");
 const jwt  = require('jsonwebtoken');
-const JWT_ADMIN_PASSWORD = "admin123";
+const { JWT_ADMIN_PASSWORD } = require("../config");
+const admin = require("../middlewares/admin");
+
 
 
 arouter.post('/signup', async (req, res) => {
@@ -75,8 +77,21 @@ arouter.post('/signin', async (req, res) => {
   
 });
 
-arouter.post('/Course/create', (req, res) => {
-  res.json({ msg: 'hello from create course admin' });
+arouter.post('/Course/create', admin, async (req, res) => {
+  console.log('hello from create course admin');
+  const adminID = req.adminID;
+  const { title, courseID, description, price, imgurl } = req.body;
+  const course = await adminModel.create({
+    title,
+    courseID:adminID,
+    description,
+    price,
+    imgurl
+  });
+  res.json({
+    msg: "Created course",
+    courseID: course._id
+  })
 });
 arouter.put('/Course/modify', (req, res) => {
   res.json({ msg: 'hello from moify course admin' });
