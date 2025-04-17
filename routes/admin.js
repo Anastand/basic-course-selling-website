@@ -101,11 +101,29 @@ arouter.post('/create',adminMiddleware , async (req, res) => {
   })
   res.json({
     msg: "created course",
-    courseID:adminID
+    creatorID: createcourse._id,
+    adminID:adminID
+    
   });
 });
-arouter.put('/modify', (req, res) => {
-  res.json({ msg: 'hello from moify course admin' });
+arouter.put('/modify',adminMiddleware ,async (req, res) => {
+  const adminID=req.adminID
+  const { title, description, price, imgurl,courseID } = req.body;
+  const updatecourse = await courseModel.updateOne({
+    _id: courseID,
+    courseID:adminID
+  }, {
+    title,
+    description,
+    price,
+    imgurl,
+    courseID: adminID
+  });
+  if (!updatecourse) {
+    res.send({ msg: "we had some issue" })
+  } else {
+    res.send({msg:"upadted course"})
+  }
 });
 arouter.get('/bulk', (req, res) => {
   res.json({ msg: 'hello from course bulk admin' });
