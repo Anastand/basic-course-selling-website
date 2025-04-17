@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { JWT_ADMIN_PASSWORD } = require('../config');
+const JWT_ADMIN_PASSWORD =process.env.JWT_ADMIN_PASSWORD;
 
 function adminMiddleware(req,res,next) {
   const token = req.headers.token;
@@ -12,4 +12,4 @@ function adminMiddleware(req,res,next) {
   } 
 };
 
-module.exports = (adminMiddleware);
+module.exports = adminMiddleware;

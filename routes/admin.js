@@ -1,9 +1,10 @@
 const express = require("express");
 const arouter = express.Router();
-const { adminModel } = require("../db");
+const { adminModel, courseModel } = require("../db");
 const { z } = require("zod");
 const bcr = require("bcrypt");
 const jwt  = require('jsonwebtoken');
+const adminMiddleware = require("../middlewares/admin");
 const JWT_ADMIN_PASSWORD = process.env.JWT_ADMIN_PASSWORD;
 
 
@@ -67,7 +68,7 @@ arouter.post('/signin', async (req, res) => {
     return
     };
     const admintoken = jwt.sign({ id: admin._id.toString() }, JWT_ADMIN_PASSWORD);
-    console.log(admintoken)
+    console.log("->"+admintoken+"<-")
     res.send({ token: admintoken });
   } catch (e) {
     res.send({msg:"we had some problem in the backend"})
@@ -75,13 +76,38 @@ arouter.post('/signin', async (req, res) => {
   
 });
 
-arouter.post('/Course/create', (req, res) => {
-  res.json({ msg: 'hello from create course admin' });
+arouter.post('/create',adminMiddleware , async (req, res) => {
+  const coursevalid = z.object({
+    title: z.string(),
+    description: z.string(),
+    price: z.number().positive(),
+    imgurl: z.string()
+  });
+  const validatecourse = coursevalid.safeParse(req.body);
+  const adminID = req.adminID
+  if (!validatecourse.success) {
+    res.send({msg:"coudnt verify the course information"})
+  }
+  else {
+    console.log("info verified")
+  }
+  const { title, description, price, imgurl } = req.body;
+  const createcourse = await courseModel.create({
+    title,
+    description,
+    price,
+    imgurl,
+    courseID: adminID
+  })
+  res.json({
+    msg: "created course",
+    courseID:adminID
+  });
 });
-arouter.put('/Course/modify', (req, res) => {
+arouter.put('/modify', (req, res) => {
   res.json({ msg: 'hello from moify course admin' });
 });
-arouter.get('/Courses/bulk', (req, res) => {
+arouter.get('/bulk', (req, res) => {
   res.json({ msg: 'hello from course bulk admin' });
 });
 
