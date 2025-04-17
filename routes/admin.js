@@ -56,19 +56,22 @@ arouter.post('/signup', async (req, res) => {
 });
 
 arouter.post('/signin', async (req, res) => {
+  console.log("hello from admin signup")
   const { email, password } = req.body;
   const admin = await adminModel.findOne({ email })
+  console.log(admin)
   if (!admin) {
     res.send({msg:"this email doesnt exist"})
     return
   };
   try {
-    const ismatch = bcr.compare(password, admin.password)
+    const ismatch = await bcr.compare(password, admin.password)
+    console.log(ismatch)
     if (!ismatch) {
     res.send({msg:"this password is worng"})
     return
     };
-    const admintoken = jwt.sign({ id: admin._id.toString() }, JWT_ADMIN_PASSWORD);
+    const admintoken = jwt.sign({ id: admin._id.toString() }, admin123);
     console.log(admintoken)
     res.send({ token: admintoken });
   } catch (e) {
@@ -94,6 +97,7 @@ arouter.post('/Course/create', admin, async (req, res) => {
   })
 });
 arouter.put('/Course/modify', (req, res) => {
+  
   res.json({ msg: 'hello from moify course admin' });
 });
 arouter.get('/Courses/bulk', (req, res) => {

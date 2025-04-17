@@ -12,8 +12,6 @@ const jwt  = require('jsonwebtoken');
 const { JWT_USERS_PASSWORD } = require('../config');
 
 
-
-
 // Define signup route to handle new user registration
 urouter.post('/signup', async (req, res) => {
   // Set up Zod schema to validate request body fields
