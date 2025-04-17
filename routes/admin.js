@@ -4,7 +4,7 @@ const { adminModel } = require("../db");
 const { z } = require("zod");
 const bcr = require("bcrypt");
 const jwt  = require('jsonwebtoken');
-const JWT_ADMIN_PASSWORD = "admin123";
+const JWT_ADMIN_PASSWORD = process.env.JWT_ADMIN_PASSWORD;
 
 
 arouter.post('/signup', async (req, res) => {
@@ -20,7 +20,7 @@ arouter.post('/signup', async (req, res) => {
   const succededbodyvalidation = bodyvalidation.safeParse(req.body);
   try {
     // If validation fails, send an error response and exit
-    if (!succededbodyvalidation) {
+    if (!succededbodyvalidation.success) {
       res.send({ msg: "Invalid credentials" });
       return;
     }

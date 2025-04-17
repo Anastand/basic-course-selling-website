@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require("express");
 const urouter = require("./routes/users");
 const crouter = require("./routes/courses");
@@ -8,7 +9,7 @@ app.use(express.json());
 
 async function connection() {
   try {
-    await mongoose.connect("mongodb+srv://bhardwaj03aryan:9g7ncxqbbk@cluster0.le0ri9c.mongodb.net/basic-course-selling-website")
+    await mongoose.connect(process.env.DB_URL)
     console.log("bitch we connected")
     app.listen(3000, () => {
       console.log("Server is running on http://localhost:3000");
