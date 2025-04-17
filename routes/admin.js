@@ -117,7 +117,7 @@ arouter.put('/modify',adminMiddleware ,async (req, res) => {
     description,
     price,
     imgurl,
-    courseID: adminID
+    creatorID:adminID
   });
   if (!updatecourse) {
     res.send({ msg: "we had some issue" })
