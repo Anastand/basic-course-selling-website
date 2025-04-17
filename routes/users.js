@@ -9,7 +9,9 @@ const { z } = require("zod"); // Import Zod for validation
 // Import bcrypt for hashing passwords securely
 const bcr = require("bcrypt"); // Import bcrypt for password hashing
 const jwt  = require('jsonwebtoken');
-const { JWT_USERS_PASSWORD } = require('../config');
+const JWT_USERS_PASSWORD = "user123";
+
+
 
 
 // Define signup route to handle new user registration

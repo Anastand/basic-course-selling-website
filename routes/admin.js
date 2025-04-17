@@ -4,9 +4,7 @@ const { adminModel } = require("../db");
 const { z } = require("zod");
 const bcr = require("bcrypt");
 const jwt  = require('jsonwebtoken');
-const { JWT_ADMIN_PASSWORD } = require("../config");
-const admin = require("../middlewares/admin");
-
+const JWT_ADMIN_PASSWORD = "admin123";
 
 
 arouter.post('/signup', async (req, res) => {
@@ -56,22 +54,19 @@ arouter.post('/signup', async (req, res) => {
 });
 
 arouter.post('/signin', async (req, res) => {
-  console.log("hello from admin signup")
   const { email, password } = req.body;
   const admin = await adminModel.findOne({ email })
-  console.log(admin)
   if (!admin) {
     res.send({msg:"this email doesnt exist"})
     return
   };
   try {
-    const ismatch = await bcr.compare(password, admin.password)
-    console.log(ismatch)
+    const ismatch = bcr.compare(password, admin.password)
     if (!ismatch) {
     res.send({msg:"this password is worng"})
     return
     };
-    const admintoken = jwt.sign({ id: admin._id.toString() }, admin123);
+    const admintoken = jwt.sign({ id: admin._id.toString() }, JWT_ADMIN_PASSWORD);
     console.log(admintoken)
     res.send({ token: admintoken });
   } catch (e) {
@@ -80,24 +75,10 @@ arouter.post('/signin', async (req, res) => {
   
 });
 
-arouter.post('/Course/create', admin, async (req, res) => {
-  console.log('hello from create course admin');
-  const adminID = req.adminID;
-  const { title, courseID, description, price, imgurl } = req.body;
-  const course = await adminModel.create({
-    title,
-    courseID:adminID,
-    description,
-    price,
-    imgurl
-  });
-  res.json({
-    msg: "Created course",
-    courseID: course._id
-  })
+arouter.post('/Course/create', (req, res) => {
+  res.json({ msg: 'hello from create course admin' });
 });
 arouter.put('/Course/modify', (req, res) => {
-  
   res.json({ msg: 'hello from moify course admin' });
 });
 arouter.get('/Courses/bulk', (req, res) => {
